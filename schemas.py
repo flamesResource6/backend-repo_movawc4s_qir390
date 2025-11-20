@@ -11,10 +11,11 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, HttpUrl
 from typing import Optional
+from datetime import datetime
 
-# Example schemas (replace with your own):
+# Example schemas (keep for reference):
 
 class User(BaseModel):
     """
@@ -38,11 +39,27 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
+# KAIT20 Website Schemas
 
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+class News(BaseModel):
+    """News items for the college website
+    Collection: "news"
+    """
+    title: str = Field(..., description="News title")
+    summary: str = Field(..., description="Short summary")
+    content: Optional[str] = Field(None, description="Full content")
+    image_url: Optional[HttpUrl] = Field(None, description="Optional image URL")
+    published_at: Optional[datetime] = Field(None, description="Publish date/time")
+
+class Event(BaseModel):
+    """Events for the college website
+    Collection: "event"
+    """
+    title: str = Field(..., description="Event name")
+    description: str = Field(..., description="Event description")
+    location: str = Field(..., description="Where it takes place")
+    date: datetime = Field(..., description="Event date/time")
+    link: Optional[HttpUrl] = Field(None, description="Registration or details link")
+
+# Add your own schemas here if needed.
+# The database viewer can discover these via the /schema endpoint implemented in backend.
